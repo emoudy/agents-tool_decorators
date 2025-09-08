@@ -1,8 +1,7 @@
 # Tool decorators, registration, and metadata extraction
 import inspect
-from dataclasses import dataclass, field
-from typing import get_type_hints, List, Callable, Dict, Any
-import json
+
+from typing import get_type_hints, List
 
 tools = {}
 tools_by_tag = {}
