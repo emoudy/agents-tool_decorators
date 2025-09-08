@@ -2,6 +2,7 @@
 import inspect
 from dataclasses import dataclass, field
 from typing import get_type_hints, List, Callable, Dict, Any
+import json
 
 tools = {}
 tools_by_tag = {}
@@ -120,3 +121,18 @@ def register_tool(tool_name=None, description=None, parameters_override=None, te
 
         return func
     return decorator
+
+@register_tool(description="Terminate the agent with a message", terminal=True)
+def terminate(message: str):
+    """Terminate the agent execution with a final message."""
+    return f"Agent terminated: {message}"
+
+@register_tool(description="Calculate the sum of two numbers")
+def add(a: float, b: float) -> float:
+    """Add two numbers together."""
+    return a + b
+
+@register_tool(description="Get information about a topic")
+def get_info(topic: str) -> str:
+    """Get basic information about a topic."""
+    return f"Information about {topic}: This is a sample information response."
