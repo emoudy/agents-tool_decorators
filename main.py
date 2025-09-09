@@ -2,12 +2,10 @@
 """
 AI Agent Framework with Claude Integration
 A tool decorator system for building AI agents with Claude.
-
-install litellm by running:
-    python3 -m venv .venv
-    source .venv/bin/activate
-    pip install litellm
 """
+
+from dotenv import load_dotenv
+load_dotenv()
 
 import os
 
