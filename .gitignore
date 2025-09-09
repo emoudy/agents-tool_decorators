@@ -1,3 +1,14 @@
-.env
+# Virtual environment directory
 .venv
+
+# Python cache and build files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment/config files:
+.env
+
+# macOS system files
 .DS_Store
