@@ -1,16 +1,16 @@
 # Tool decorators, registration, and metadata extraction
 import inspect
 import os
-
-from typing import get_type_hints, List
+from typing import List, get_type_hints
 
 tools = {}
 tools_by_tag = {}
 
+
 def to_ai_tools(tools_metadata: List[dict]):
     """
     Convert tools metadata to the AI-compatible format
-    
+
     Args:
         tools_metadata: List of tool metadata dictionaries
     Returns:
@@ -21,18 +21,20 @@ def to_ai_tools(tools_metadata: List[dict]):
         {
             "type": "function",
             "function": {
-                "name": t['tool_name'],
-                "description": t.get('description', ""),
-                "parameters": t.get('parameters', {}),
+                "name": t["tool_name"],
+                "description": t.get("description", ""),
+                "parameters": t.get("parameters", {}),
             },
-        } for t in tools_metadata
+        }
+        for t in tools_metadata
     ]
     return ai_tools
+
 
 def get_tool_metadata(func, tool_name=None, description=None, parameters_override=None, terminal=False, tags=None):
     """
     Extracts metadata for a function to use in tool registration.
-    
+
     Args:
         func: The function to extract metadata from
         tool_name: The name of the tool (defaults to function name)
@@ -50,25 +52,14 @@ def get_tool_metadata(func, tool_name=None, description=None, parameters_overrid
         signature = inspect.signature(func)
         type_hints = get_type_hints(func)
 
-        args_schema = {
-            "type": "object",
-            "properties": {},
-            "required": []
-        }
-        
+        args_schema = {"type": "object", "properties": {}, "required": []}
+
         for param_name, param in signature.parameters.items():
             if param_name in ["action_context", "action_agent"]:
                 continue
 
             def get_json_type(param_type):
-                type_mapping = {
-                    str: "string",
-                    int: "integer", 
-                    float: "number",
-                    bool: "boolean",
-                    list: "array",
-                    dict: "object"
-                }
+                type_mapping = {str: "string", int: "integer", float: "number", bool: "boolean", list: "array", dict: "object"}
                 return type_mapping.get(param_type, "string")
 
             param_type = type_hints.get(param_name, str)
@@ -86,13 +77,14 @@ def get_tool_metadata(func, tool_name=None, description=None, parameters_overrid
         "parameters": args_schema,
         "function": func,
         "terminal": terminal,
-        "tags": tags or []
+        "tags": tags or [],
     }
+
 
 def register_tool(tool_name=None, description=None, parameters_override=None, terminal=False, tags=None):
     """
     Decorator to register a function as a tool for the AI agent.
-    
+
     Args:
         tool_name: Name to register the tool as
         description: Description of what the tool does
@@ -102,6 +94,7 @@ def register_tool(tool_name=None, description=None, parameters_override=None, te
     Returns:
         The decorated function
     """
+
     def decorator(func):
         metadata = get_tool_metadata(
             func=func,
@@ -109,7 +102,7 @@ def register_tool(tool_name=None, description=None, parameters_override=None, te
             description=description,
             parameters_override=parameters_override,
             terminal=terminal,
-            tags=tags
+            tags=tags,
         )
 
         tools[metadata["tool_name"]] = {
@@ -117,7 +110,7 @@ def register_tool(tool_name=None, description=None, parameters_override=None, te
             "parameters": metadata["parameters"],
             "function": metadata["function"],
             "terminal": metadata["terminal"],
-            "tags": metadata["tags"] or []
+            "tags": metadata["tags"] or [],
         }
 
         for tag in metadata["tags"]:
@@ -126,26 +119,23 @@ def register_tool(tool_name=None, description=None, parameters_override=None, te
             tools_by_tag[tag].append(metadata["tool_name"])
 
         return func
+
     return decorator
 
-@register_tool(
-    description="Calculate the sum of two numbers"
-)
+
+@register_tool(description="Calculate the sum of two numbers")
 def add(a: float, b: float) -> float:
     """Add two numbers together."""
     return a + b
 
-@register_tool(
-    description="Get information about a topic"
-)
+
+@register_tool(description="Get information about a topic")
 def get_info(topic: str) -> str:
     """Get basic information about a topic."""
     return f"Information about {topic}: This is a sample information response."
 
-@register_tool(
-    description="Read the content of a specified project file",
-    tags=["file_operations", "read"]
-)
+
+@register_tool(description="Read the content of a specified project file", tags=["file_operations", "read"])
 def read_project_file(name: str) -> str:
     """Reads and returns the content of a specified project file. Raises FileNotFoundError if the file doesn't exist.
     Args:
@@ -156,23 +146,17 @@ def read_project_file(name: str) -> str:
     with open(name, "r") as f:
         return f.read()
 
-@register_tool(
-    description="List all Python files in the current project directory",
-    tags=["file_operations", "list"]
-)
+
+@register_tool(description="List all Python files in the current project directory", tags=["file_operations", "list"])
 def list_project_files() -> List[str]:
     """Lists all Python files in the current project directory.
     Returns:
         A sorted list of Python filenames
     """
-    return sorted([file for file in os.listdir(".")
-                    if file.endswith(".py")])
+    return sorted([file for file in os.listdir(".") if file.endswith(".py")])
 
-@register_tool(
-    description="Terminate the agent's execution",
-    tags=["system"],
-    terminal=True
-)
+
+@register_tool(description="Terminate the agent's execution", tags=["system"], terminal=True)
 def terminate(message: str) -> str:
     """Terminates the agent's execution with a final message.
     Args:

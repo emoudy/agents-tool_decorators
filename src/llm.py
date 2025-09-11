@@ -2,6 +2,7 @@
 import json
 
 from litellm import completion
+
 from .config import MODEL_NAME
 from .models import Prompt
 
@@ -18,20 +19,11 @@ def generate_response(prompt: Prompt) -> str:
     tools = prompt.tools
 
     if not tools:
-        response = completion(
-            model=MODEL_NAME,
-            messages=messages,
-            max_tokens=1024
-        )
+        response = completion(model=MODEL_NAME, messages=messages, max_tokens=1024)
         return response.choices[0].message.content
     else:
         # limits the response length from the LLM to 1024 tokens
-        response = completion(
-            model=MODEL_NAME,
-            messages=messages,
-            tools=tools,
-            max_tokens=1024
-        )
+        response = completion(model=MODEL_NAME, messages=messages, tools=tools, max_tokens=1024)
 
         if response.choices[0].message.tool_calls:
             tool = response.choices[0].message.tool_calls[0]

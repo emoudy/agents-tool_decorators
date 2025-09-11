@@ -4,19 +4,21 @@ AI Agent Framework with Claude Integration
 A tool decorator system for building AI agents with Claude.
 """
 
-from dotenv import load_dotenv
-load_dotenv()
-
 import os
 
-from .models import Goal
+from dotenv import load_dotenv
+
+from .framework import Agent, AgentFunctionCallingActionLanguage, Environment, PythonActionRegistry
 from .llm import generate_response
-from .framework import Agent, AgentFunctionCallingActionLanguage, PythonActionRegistry, Environment
+from .models import Goal
+
+load_dotenv()
+
 
 def main():
     """Example usage of the agent framework"""
     # Set up API key
-    if not os.environ.get('ANTHROPIC_API_KEY'):
+    if not os.environ.get("ANTHROPIC_API_KEY"):
         print("Please set ANTHROPIC_API_KEY environment variable")
         return
 
@@ -25,7 +27,7 @@ def main():
         Goal(
             priority=1,
             name="Helpful Assistant",
-            description="You are a helpful AI assistant. Use the available tools to help users with their tasks."
+            description="You are a helpful AI assistant. Use the available tools to help users with their tasks.",
         )
     ]
 
@@ -41,16 +43,16 @@ def main():
         agent_language=language,
         action_registry=action_registry,
         generate_response=generate_response,
-        environment=environment
+        environment=environment,
     )
 
     # Run agent
     print("Starting AI Agent with Claude...")
     memory = agent.run("Help me add 5 + 3 and then tell me about Python programming")
-    
+
     print("\n--- Final Memory ---")
     for i, item in enumerate(memory.get_memories()):
-        print(f"{i+1}. {item}")
+        print(f"{i + 1}. {item}")
 
 
 if __name__ == "__main__":
