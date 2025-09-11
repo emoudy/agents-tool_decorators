@@ -8,8 +8,8 @@ import os
 # Add parent directory to path to import project modules
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from framework import Action, ActionRegistry, Memory, Environment, Agent
-from models import Goal
+from src.framework import Action, ActionRegistry, Memory, Environment, Agent
+from src.models import Goal
 
 
 class TestAction(unittest.TestCase):

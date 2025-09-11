@@ -8,7 +8,7 @@ import os
 # Add parent directory to path to import project modules
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tools import tools, tools_by_tag, register_tool
+from src.tools import tools, tools_by_tag, register_tool
 
 
 def check_description_length(tool_name: str, description: str, max_length: int = 1024) -> str:

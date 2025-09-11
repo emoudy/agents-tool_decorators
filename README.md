@@ -3,11 +3,25 @@ This agent framework builds AI agents with tool integration using Claude. It sup
 
 ## Directory Structure
 ```
-main.py                # Main entry point and orchestrator
-models.py              # Data structures and type definitions
-llm.py                 # LLM interaction logic
-framework.py           # Core agent logic and orchestration
-tools.py               # Tool decorators and tool definitions
+src/                   # Source code package
+├── __init__.py        # Package initialization and exports
+├── main.py            # Main entry point and orchestrator
+├── config.py          # Configuration and environment settings
+├── models.py          # Data structures and type definitions
+├── llm.py             # LLM interaction logic
+├── framework.py       # Core agent logic and orchestration
+└── tools.py           # Tool decorators and tool definitions
+
+tests/                 # Test suite
+├── __init__.py        # Test infrastructure and mocking setup
+├── test_tools.py      # Tool registration and validation tests
+├── test_framework.py  # Agent workflow and component tests
+├── test_llm.py        # LLM integration tests
+├── test_models.py     # Data structure tests
+└── test_integration.py # End-to-end integration tests
+
+main.py                # Application entry point
+requirements.txt       # Python dependencies
 README.md              # Project documentation
 ```
 
@@ -21,7 +35,7 @@ README.md              # Project documentation
 
 2. **Install dependencies**:
    ```bash
-   pip install litellm python-dotenv
+   pip install -r requirements.txt
    ```
 
 3. **Run the agent**:
@@ -65,25 +79,33 @@ The project includes a comprehensive test suite covering all modules:
 
 ### Test Structure
 
-- `tests/test_tools.py` - Tool registration, validation, and decorator functionality
+The test suite is organized to mirror the source structure:
+
+- `tests/__init__.py` - Test infrastructure, automatic mocking setup, and configuration
+- `tests/test_tools.py` - Tool registration, validation, and decorator functionality  
 - `tests/test_framework.py` - Agent workflow, memory, actions, and environment
 - `tests/test_llm.py` - LLM response generation and API integration
 - `tests/test_models.py` - Data structures and type definitions
 - `tests/test_integration.py` - End-to-end system integration tests
 
-### Alternative Testing with pytest
+All tests use automatic LLM mocking in test environments and include comprehensive coverage of the framework components.
 
-For enhanced testing features, you can install and use pytest:
+## Troubleshooting
+
+If you encounter issues with dependencies or environment setup:
 
 ```bash
-pip install pytest
-pytest tests/
-```
-
-# troubleshoot
+# Remove existing virtual environment
 rm -rf .venv
+
+# Create new virtual environment
 python3 -m venv .venv
+
+# Activate virtual environment
 source .venv/bin/activate
-pip install python-dotenv litellm
+
+# Install dependencies from requirements file
+pip install -r requirements.txt
+```
 
 

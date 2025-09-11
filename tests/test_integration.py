@@ -7,12 +7,12 @@ from unittest.mock import MagicMock
 # Import from the tests package to get automatic setup
 from tests import BaseTestCase, create_mock_llm_response, create_mock_tool_call
 
-from main import main
-from framework import Agent, PythonActionRegistry, Environment, AgentFunctionCallingActionLanguage
-from models import Goal
-from tools import register_tool
-from config import Config
-from llm import generate_response
+from src.main import main
+from src.framework import Agent, PythonActionRegistry, Environment, AgentFunctionCallingActionLanguage
+from src.models import Goal
+from src.tools import register_tool
+from src.config import Config
+from src.llm import generate_response
 import os
 
 
@@ -95,27 +95,27 @@ class TestSystemConfiguration(BaseTestCase):
     def test_all_modules_importable(self):
         """Test that all modules can be imported successfully."""
         try:
-            import main
-            import models
-            import llm
-            import framework
-            import tools
-            import config
+            import src.main
+            import src.models
+            import src.llm
+            import src.framework
+            import src.tools
+            import src.config
         except ImportError as e:
             self.fail(f"Failed to import module: {e}")
     
     def test_config_values(self):
         """Test configuration values are properly set."""
-        import config
+        import src.config
         
         # Test that MODEL_NAME is defined
-        self.assertTrue(hasattr(config, 'MODEL_NAME'))
-        self.assertIsInstance(config.MODEL_NAME, str)
-        self.assertTrue(len(config.MODEL_NAME) > 0)
+        self.assertTrue(hasattr(src.config, 'MODEL_NAME'))
+        self.assertIsInstance(src.config.MODEL_NAME, str)
+        self.assertTrue(len(src.config.MODEL_NAME) > 0)
     
     def test_dataclass_definitions(self):
         """Test that dataclasses are properly defined."""
-        from models import Prompt, Goal
+        from src.models import Prompt, Goal
         from dataclasses import is_dataclass
         
         self.assertTrue(is_dataclass(Prompt))

@@ -9,11 +9,11 @@ from unittest.mock import patch, MagicMock
 
 # Import from the tests package to get automatic setup
 from tests import BaseTestCase, create_mock_llm_response, create_mock_tool_call, Config
-from models import Prompt
+from src.models import Prompt
 
 # Try to import llm module, handle gracefully if missing
 try:
-    from llm import generate_response
+    from src.llm import generate_response
     LLM_MODULE_AVAILABLE = True
 except ImportError:
     LLM_MODULE_AVAILABLE = False

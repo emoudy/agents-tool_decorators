@@ -23,18 +23,17 @@ litellm._turn_on_debug()
 from dotenv import load_dotenv
 from pathlib import Path
 import sys
-from config import MODEL_NAME
+
+# Add the project root to Python path for imports
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 
 # Load test-specific environment variables
-project_root = Path(__file__).parent.parent
 test_env_path = project_root / '.env.test'
 load_dotenv(test_env_path)
 
-# Add the project root to Python path for imports
-sys.path.insert(0, str(project_root))
-
-# NOW we can import config (after path setup)
-from config import Config, get_test_config
+# Import from src package
+from src.config import MODEL_NAME, Config, get_test_config
 from unittest.mock import patch, MagicMock
 import unittest
 
@@ -67,7 +66,7 @@ class BaseTestCase(unittest.TestCase):
         super().setUp()
         if Config.MOCK_LLM_CALLS:
             # Start LLM mocking for this test
-            self.llm_patcher = patch('llm.completion')
+            self.llm_patcher = patch('src.llm.completion')
             self.mock_completion = self.llm_patcher.start()
             self.mock_completion.return_value = create_mock_llm_response()
     

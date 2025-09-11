@@ -5,8 +5,8 @@ import time
 import traceback
 
 from typing import List, Callable, Dict, Any
-from models import Goal, Prompt
-from tools import tools
+from .models import Goal, Prompt
+from .tools import tools
 
 class Action:
     """Represents an executable action for the agent"""

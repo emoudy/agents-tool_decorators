@@ -6,7 +6,7 @@ from dataclasses import fields
 
 # Import from the tests package to get automatic setup
 from tests import BaseTestCase
-from models import Prompt, Goal
+from src.models import Prompt, Goal
 
 
 class TestPrompt(BaseTestCase):

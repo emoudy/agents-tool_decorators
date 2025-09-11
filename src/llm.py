@@ -2,8 +2,8 @@
 import json
 
 from litellm import completion
-from config import MODEL_NAME
-from models import Prompt
+from .config import MODEL_NAME
+from .models import Prompt
 
 
 def generate_response(prompt: Prompt) -> str:
