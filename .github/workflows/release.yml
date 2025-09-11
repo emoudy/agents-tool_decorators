@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest
+
+    - name: Run full test suite
+      run: |
+        python -m unittest discover tests/ -v
+
+    - name: Create Release Archive
+      run: |
+        # Create a clean distribution
+        mkdir -p dist
+        tar -czf dist/ai-agent-framework-${{ github.ref_name }}.tar.gz \
+          --exclude='.git*' \
+          --exclude='__pycache__*' \
+          --exclude='.venv*' \
+          --exclude='dist' \
+          --exclude='.DS_Store' \
+          .
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/ai-agent-framework-${{ github.ref_name }}.tar.gz
+        body: |
+          ## Release ${{ github.ref_name }}
+          
+          ### Features
+          - AI Agent Framework with Claude integration
+          - Tool decorator system for easy extension
+          - Comprehensive test suite with automatic mocking
+          - Professional package structure
+          
+          ### Installation
+          ```bash
+          pip install -r requirements.txt
+          ```
+          
+          ### Quick Start
+          ```bash
+          python main.py
+          ```
+          
+          See README.md for detailed documentation.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
