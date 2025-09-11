@@ -11,24 +11,74 @@ tools.py               # Tool decorators and tool definitions
 README.md              # Project documentation
 ```
 
-## Setup & Run Instructions
+## Running the Application
 
-1. **Install dependencies and set up your environment:**
-	```sh
-    python3 -m venv .venv
-    source .venv/bin/activate
-    pip install python-dotenv litellm
-	```
+1. **Set up your environment variables**:
+   Create a `.env` file in the project root:
+   ```
+   ANTHROPIC_API_KEY=your_anthropic_api_key_here
+   ```
 
-2. **Set your Anthropic API key in a `.env` file:**
-	Create a file named `.env` in your project root with the content as in the `.env_example` file.
+2. **Install dependencies**:
+   ```bash
+   pip install litellm python-dotenv
+   ```
 
-3. **Run the agent:**
-	```sh
-	python main.py
-	```
+3. **Run the agent**:
+   ```bash
+   python main.py
+   ```
 
-This will start the agent and execute the workflow defined in `main.py`.
+## Testing
+
+The project includes a comprehensive test suite covering all modules:
+
+### Running Tests
+
+1. **Run all tests**:
+   ```bash
+   python3 -m unittest discover tests/
+   ```
+
+2. **Run specific test modules**:
+   ```bash
+   # Test tool functionality
+   python3 -m unittest tests.test_tools
+   
+   # Test framework components
+   python3 -m unittest tests.test_framework
+   
+   # Test LLM integration
+   python3 -m unittest tests.test_llm
+   
+   # Test data models
+   python3 -m unittest tests.test_models
+   
+   # Test integration scenarios
+   python3 -m unittest tests.test_integration
+   ```
+
+3. **Run tests with verbose output**:
+   ```bash
+   python3 -m unittest discover tests/ -v
+   ```
+
+### Test Structure
+
+- `tests/test_tools.py` - Tool registration, validation, and decorator functionality
+- `tests/test_framework.py` - Agent workflow, memory, actions, and environment
+- `tests/test_llm.py` - LLM response generation and API integration
+- `tests/test_models.py` - Data structures and type definitions
+- `tests/test_integration.py` - End-to-end system integration tests
+
+### Alternative Testing with pytest
+
+For enhanced testing features, you can install and use pytest:
+
+```bash
+pip install pytest
+pytest tests/
+```
 
 # troubleshoot
 rm -rf .venv
