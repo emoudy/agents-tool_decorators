@@ -1,8 +1,6 @@
 # AI Agent Framework
 
-[![CI/CD Pipeline](https://github.com/YOUR_USERNAME/agents_tool_decorators/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/YOUR_USERNAME/agents_tool_decorators/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Project Overview
 This agent framework builds AI agents with tool integration using Claude. It supports tool decorators, modular design, and easy extension for custom workflows.
@@ -158,12 +156,11 @@ This project includes automated CI/CD using GitHub Actions:
 ### Workflows
 
 1. **CI/CD Pipeline** (`.github/workflows/ci-cd.yml`):
-   - Runs on every push to `main`/`develop` and all pull requests
+   - Runs on every push to `main`/`develop`
    - Tests against Python 3.9, 3.10, 3.11, and 3.12
    - Includes linting (flake8), formatting (black), import sorting (isort)
    - Runs comprehensive test suite with coverage reporting
    - Security scanning with safety and bandit
-   - Automatic documentation deployment to GitHub Pages
 
 2. **Release Workflow** (`.github/workflows/release.yml`):
    - Triggers on version tags (e.g., `v1.0.0`)
@@ -176,7 +173,7 @@ The project enforces code quality through:
 - **Black**: Code formatting (127 character line length)
 - **isort**: Import sorting and organization
 - **flake8**: Linting and style checking
-- **pytest**: Testing with coverage reporting
+- **unittest**: Testing with Python's built-in framework
 - **safety**: Dependency vulnerability scanning
 - **bandit**: Security linting
 
@@ -184,12 +181,7 @@ The project enforces code quality through:
 
 1. **Enable GitHub Actions**: Push to a GitHub repository to automatically trigger workflows
 
-2. **Add Status Badges**: Update the repository URL in the README badges:
-   ```markdown
-   [![CI/CD Pipeline](https://github.com/YOUR_USERNAME/YOUR_REPO/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions)
-   ```
-
-3. **Release Management**: Create releases by pushing version tags:
+2. **Release Management**: Create releases by pushing version tags:
    ```bash
    git tag v1.0.0
    git push origin v1.0.0
