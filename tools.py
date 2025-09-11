@@ -1,24 +1,33 @@
 # Tool decorators, registration, and metadata extraction
 import inspect
+import os
 
 from typing import get_type_hints, List
 
 tools = {}
 tools_by_tag = {}
 
-def to_openai_tools(tools_metadata: List[dict]):
-    """Convert tools metadata to OpenAI-compatible format"""
-    openai_tools = [
+def to_ai_tools(tools_metadata: List[dict]):
+    """
+    Convert tools metadata to the AI-compatible format
+    
+    Args:
+        tools_metadata: List of tool metadata dictionaries
+    Returns:
+        List of tools formatted for AI consumption
+    """
+
+    ai_tools = [
         {
             "type": "function",
             "function": {
                 "name": t['tool_name'],
-                "description": t.get('description', "")[:1024],
+                "description": t.get('description', ""),
                 "parameters": t.get('parameters', {}),
             },
         } for t in tools_metadata
     ]
-    return openai_tools
+    return ai_tools
 
 def get_tool_metadata(func, tool_name=None, description=None, parameters_override=None, terminal=False, tags=None):
     """
@@ -31,7 +40,6 @@ def get_tool_metadata(func, tool_name=None, description=None, parameters_overrid
         parameters_override: Override for the argument schema
         terminal: Whether the tool is terminal
         tags: List of tags to associate with the tool
-        
     Returns:
         dict: Tool metadata including description, parameters schema, and function
     """
@@ -91,7 +99,6 @@ def register_tool(tool_name=None, description=None, parameters_override=None, te
         parameters_override: Custom parameter schema
         terminal: Whether this tool ends agent execution
         tags: Tags for organizing tools
-        
     Returns:
         The decorated function
     """
@@ -121,17 +128,56 @@ def register_tool(tool_name=None, description=None, parameters_override=None, te
         return func
     return decorator
 
-@register_tool(description="Terminate the agent with a message", terminal=True)
-def terminate(message: str):
-    """Terminate the agent execution with a final message."""
-    return f"Agent terminated: {message}"
-
-@register_tool(description="Calculate the sum of two numbers")
+@register_tool(
+    description="Calculate the sum of two numbers"
+)
 def add(a: float, b: float) -> float:
     """Add two numbers together."""
     return a + b
 
-@register_tool(description="Get information about a topic")
+@register_tool(
+    description="Get information about a topic"
+)
 def get_info(topic: str) -> str:
     """Get basic information about a topic."""
     return f"Information about {topic}: This is a sample information response."
+
+@register_tool(
+    description="Read the content of a specified project file",
+    tags=["file_operations", "read"]
+)
+def read_project_file(name: str) -> str:
+    """Reads and returns the content of a specified project file. Raises FileNotFoundError if the file doesn't exist.
+    Args:
+        name: The name of the file to read
+    Returns:
+        The contents of the file as a string
+    """
+    with open(name, "r") as f:
+        return f.read()
+
+@register_tool(
+    description="List all Python files in the current project directory",
+    tags=["file_operations", "list"]
+)
+def list_project_files() -> List[str]:
+    """Lists all Python files in the current project directory.
+    Returns:
+        A sorted list of Python filenames
+    """
+    return sorted([file for file in os.listdir(".")
+                    if file.endswith(".py")])
+
+@register_tool(
+    description="Terminate the agent's execution",
+    tags=["system"],
+    terminal=True
+)
+def terminate(message: str) -> str:
+    """Terminates the agent's execution with a final message.
+    Args:
+        message: The final message to return before terminating
+    Returns:
+        The message with a termination note appended
+    """
+    return f"{message}\nTerminating..."

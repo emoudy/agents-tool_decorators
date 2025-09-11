@@ -12,7 +12,7 @@ def generate_response(prompt: Prompt) -> str:
     Args:
         prompt: Prompt object containing messages and tools
     Returns:
-        str: Response from Claude (either text or JSON for tool calls)
+        str: Response from the LLM (either text or JSON for tool calls)
     """
     messages = prompt.messages
     tools = prompt.tools
@@ -25,6 +25,7 @@ def generate_response(prompt: Prompt) -> str:
         )
         return response.choices[0].message.content
     else:
+        # limits the response length from the LLM to 1024 tokens
         response = completion(
             model=MODEL_NAME,
             messages=messages,
