@@ -58,11 +58,20 @@ Run all quality checks locally before committing:
 python quality_check.py
 ```
 
-This script runs:
-- **Flake8**: Linting and style checking
-- **Black**: Code formatting verification  
-- **isort**: Import sorting verification
-- **Tests**: Full test suite execution
+### Pre-Push Validation
+
+**🚨 IMPORTANT**: Always run this before pushing code to ensure it passes CI/CD:
+```bash
+python validate_before_push.py
+```
+
+This comprehensive script runs the exact same checks as the CI/CD pipeline:
+- **Code Quality**: flake8, black, isort validation
+- **Test Suite**: All unit tests with coverage
+- **Security Scans**: safety vulnerability check and bandit security linting
+- **Import Validation**: Ensures all modules can be imported correctly
+
+**Only push code if this script passes!**
 
 ### Manual Quality Tools
 
